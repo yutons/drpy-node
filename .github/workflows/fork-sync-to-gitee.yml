@@ -1,0 +1,33 @@
+name: Fork Sync To Gitee
+# 注意：需要手动添加SSH_PRIVATE_KEY
+on:
+  push:
+  schedule:
+    # 每天北京时间9点跑
+    - cron:  '0 7,12 * * *'
+  workflow_dispatch: # on button click
+  
+jobs:
+  fork-sync-action:
+    runs-on: ubuntu-latest
+    steps:
+      - name: fork-sync-action
+        uses: tgymnich/fork-sync@v2.0.10
+        with:
+          owner: hjdhnx    			# fork 的上游仓库 user
+          head: main       			# fork 的上游仓库 branch
+          base: main       			# 本地仓库 branch
+  hub-mirror-to-gitee-action:
+    runs-on: ubuntu-latest
+    needs: [fork-sync-action]
+    steps:
+      - name: hub-mirror-to-gitee-action
+        uses: wearerequired/git-mirror-action@v1.2.0
+        env:
+          # 注意在 Settings->Secrets 配置 SSH_PRIVATE_KEY
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        with:
+          # 注意替换为你的 GitHub 源仓库地址
+          source-repo: git@github.com:yutons/drpy-node.git
+          # 注意替换为你的 Gitee 目标仓库地址
+          destination-repo: git@gitee.com:yutons/drpy-node.git
