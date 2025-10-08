@@ -20,6 +20,10 @@ import rootController from './root.js';
 import encoderController from './encoder.js';
 // 解码器控制器
 import decoderController from './decoder.js';
+
+// 自定义解密控制器 by yutons
+import jmController from './jm.js';
+
 // 认证编码控制器
 import authCoderController from './authcoder.js';
 // Web界面控制器
@@ -64,6 +68,10 @@ export const registerRoutes = (fastify, options) => {
     fastify.register(encoderController, options);
     // 注册解码器路由
     fastify.register(decoderController, options);
+
+    // 注册自定义解密路由 by yutons
+    fastify.register(jmController, options);
+
     // 注册认证编码路由
     fastify.register(authCoderController, options);
     // 注册Web界面路由

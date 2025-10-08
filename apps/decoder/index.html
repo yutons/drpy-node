@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>全能解密工具</title>
+    <script src="/public/jquery.min.js"></script>
+    <style>
+        /* 通用样式 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #fff;
+            overflow-x: hidden; /* 防止页面水平滚动 */
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px; /* 最大宽度限制 */
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-sizing: border-box;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        button {
+            width: 48%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+            color: #ffffff;
+        }
+
+        .input-group {
+            display: flex;
+        }
+
+        .input-group .decrypt-btn {
+            background-color: #6c757d;
+            height: 45px;
+            width: 60px;
+        }
+
+        .input-group .decrypt-btn:hover {
+            background-color: #575f65;
+        }
+
+        /* 文本框 */
+        .input-box, .result-box {
+            width: 100%;
+            height: 55vh; /* 设置为视口高度的35%，以适应各种屏幕 */
+            overflow-y: auto;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            background-color: #fafafa;
+            box-sizing: border-box;
+        }
+
+        .input-box {
+            height: 45px !important;
+        }
+
+        /* 选择框和按钮布局 */
+        .button-group {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+
+        .select-group select, .button-group button {
+            width: 100px;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        /* 按钮 */
+        .button-group button {
+            color: white;
+            cursor: pointer;
+        }
+
+        .button-group .home-btn {
+            background-color: #2196F3;
+            margin-right: 10px;
+        }
+
+        .button-group .home-btn:hover {
+            background-color: #0b7dda;
+        }
+
+        /* 复制按钮样式 */
+        .button-group .copy-btn {
+            background-color: #ffc107;
+        }
+
+        .button-group .copy-btn:hover {
+            background-color: #eab107;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>全能解密工具</h2>
+
+    <div class="input-group">
+        <!-- 输入框 -->
+        <input class="input-box" id="input-code" placeholder="在此输入接口地址或密文..."/>
+        <!-- 加密按钮 -->
+        <button class="decrypt-btn" id="decrypt-btn">解密</button>
+    </div>
+
+    <!-- 加密结果 -->
+    <textarea class="result-box" id="result-code" cols="80" rows="20" readonly=""></textarea>
+
+    <div class="button-group">
+        <button class="home-btn" id="home-btn">主页</button>
+        <button class="copy-btn" id="copy-result-btn">复制</button>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        // 回到首页
+        $('#home-btn').click(function () {
+            window.location.href = '/'
+        });
+
+        // 复制加密结果按钮点击事件
+        $('#copy-result-btn').click(function () {
+            const resultText = $('#result-code').val();
+            if (resultText) {
+                // 创建临时文本框来复制文本
+                const tempInput = document.createElement('input');
+                document.body.appendChild(tempInput);
+                tempInput.value = resultText;
+                tempInput.select();
+                document.execCommand('copy');
+                document.body.removeChild(tempInput);
+                alert('加密结果已复制到剪贴板');
+            } else {
+                alert('没有加密结果可以复制');
+            }
+        });
+
+        // 解密按钮点击事件
+        $('#decrypt-btn').click(function () {
+            const code = $('#input-code').val();
+            if (!code) {
+                alert("请输入接口地址或密文！");
+                return;
+            }
+
+            // 发送解密请求
+            $.ajax({
+                url: '/apidecode',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({code}),
+                success: function (response) {
+                    if (response.success) {
+                        // 解密成功，将结果放入待加密框
+                        let resultData = response.result;
+
+                        const date = new Date().toISOString().replace('T', ' ').split('.')[0];
+                        // 执行解密操作
+                        let result =
+                            '//  >>> 当前时间是：' + date + ' <<<\n' +
+                            '//  当前接口：' + code + '\n' + resultData;
+                        $('#result-code').val(result);
+                    } else {
+                        alert("解密失败：" + response.error);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    alert("解密请求失败，请稍后再试。" + error);
+                }
+            });
+        });
+
+    });
+</script>
+
+</body>
+</html>

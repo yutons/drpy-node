@@ -38,6 +38,7 @@ nodejs作为服务端的drpy实现。全面升级异步写法
 * [DS庆祝页面-完结撒花](/apps/happy/index.html)
 * [DrPlayer](/apps/drplayer)
 * [代码加解密工具](/admin/encoder)
+* [全能解密工具](/jm)
 * [央视点播解析工具](/proxy/央视大全[官]/index.html)
 * [在线猫ds源主页](/cat/index.html)
 * [V我50支付凭证生成器](/authcoder?len=10&number=1)

@@ -75,5 +75,24 @@ export default (fastify, options, done) => {
         }
     });
 
+    // 自定义解密 by yutons
+    fastify.get('/jm', async (request, reply) => {
+        const encoderFilePath = path.join(options.appsDir, 'decoder/index.html'); // 获取 encoder.html 文件的路径
+
+        // 检查文件是否存在
+        if (!existsSync(encoderFilePath)) {
+            return reply.status(404).send({error: 'decoder.html not found'});
+        }
+
+        try {
+            // 读取 HTML 文件内容
+            const htmlContent = readFileSync(encoderFilePath, 'utf-8');
+            reply.type('text/html').send(htmlContent); // 返回 HTML 文件内容
+        } catch (error) {
+            fastify.log.error(`Failed to read encoder.html: ${error.message}`);
+            return reply.status(500).send({error: 'Failed to load encoder page'});
+        }
+    });
+
     done();
 };
