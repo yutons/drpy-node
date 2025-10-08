@@ -220,6 +220,31 @@
                 alert("请填写密文！");
                 return;
             }
+            // 发送解密请求
+            $.ajax({
+                url: '/decode',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({code}),
+                success: function (response) {
+                    if (response.success) {
+                        // 解密成功，将结果放入待加密框
+                        $('#input-code').val(response.result);
+                    } else {
+                        alert("解密失败：" + response.error);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    alert("解密请求失败，请稍后再试。" + error);
+                }
+            });
+        });
+        $('#decrypt-btn1').click(function () {
+            const code = $('#result-code').val();
+            if (!code) {
+                alert("请填写密文！");
+                return;
+            }
             // 弹窗提示用户支付凭证
             if (confirm("此功能仅限会员使用，V我50开启，是否继续？")) {
                 const authCode = prompt("请输入您的支付凭证：");

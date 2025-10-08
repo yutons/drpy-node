@@ -55,5 +55,27 @@ export default (fastify, options, done) => {
             reply.status(500).send({error: error.message});
         }
     });
+
+    fastify.post('/decode', async (request, reply) => {
+        const {code} = request.body;
+
+        if (!code) {
+            return reply.status(400).send({error: 'Missing required parameters: code'});
+        }
+        // 检查文本大小
+        const textSize = Buffer.byteLength(code, 'utf8'); // 获取 UTF-8 编码的字节大小
+        if (textSize > options.MAX_TEXT_SIZE) {
+            return reply
+                .status(400)
+                .send({error: `Text content exceeds the maximum size of ${options.MAX_TEXT_SIZE / 1024} KB`});
+        }
+
+        try {
+            let result = getOriginalJs(code);
+            reply.send({success: true, result});
+        } catch (error) {
+            reply.status(500).send({error: error.message});
+        }
+    });
     done();
 };
