@@ -12,6 +12,7 @@ import './utils/esm-register.mjs';
 import {daemon} from "./utils/daemonManager.js";
 // 注册控制器
 import {registerRoutes} from './controllers/index.js';
+import cron from 'node-cron';
 
 const {fastify} = fastlogger;
 
@@ -180,6 +181,15 @@ registerRoutes(fastify, {
     subFilePath: path.join(__dirname, 'public/sub/sub.json'),
 });
 
+async function configInit(localAddress) {
+    // 启动成功 初始化配置
+    await axios.get(localAddress + '/config/1').then(res => {
+        console.log('初始化配置成功');
+    }).catch(err => {
+        console.log('初始化配置失败');
+        console.log(err);
+    });
+}
 
 // 启动服务
 const start = async () => {
@@ -216,7 +226,18 @@ const start = async () => {
         } else {
             console.log('Not running on Vercel!');
         }
-
+        // 启动成功 初始化配置
+        await configInit(localAddress);
+        // await axios.get(localAddress + '/config/1').then(res => {
+        //     console.log('初始化配置成功');
+        // }).catch(async err => {
+        //     console.log('初始化配置失败');
+        //     console.log(err);
+        //     await configInit(localAddress);
+        //     cron.schedule('0/30 * * * *', () => { // 每分钟执行一次
+        //         configInit(localAddress);
+        //     });
+        // });
     } catch (err) {
         fastify.log.error(err);
         process.exit(1);
