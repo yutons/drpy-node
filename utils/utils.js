@@ -124,6 +124,45 @@ export function naturalSort(arr, key, customOrder = []) {
     });
 }
 
+/**
+ * 自定义配置扩展 by yutons
+ * @param arr
+ * @param key
+ * @param customConfigList
+ * @returns {*}
+ */
+export function naturalCustomConfig(sites, key, customConfigList = {}) {
+    // 过滤敏感资源
+    sites = sites.filter(it => {
+        return !(new RegExp('密' || '.*')).test(it.name) ||
+            !(new RegExp('密' || '.*')).test(it.key)
+    });
+
+    // 白名单列表
+    let whiteList = customConfigList['whiteList'] || [];
+    sites = sites.filter(it => {
+        // 白名单过滤
+        it = whiteList.length > 0 ? ((new RegExp(whiteList.join('|'))).test(it.name) ||
+            (new RegExp(whiteList.join('|'))).test(it.key)) : it;
+        return it;
+    });
+
+    // 黑名单列表
+    let blackList = customConfigList['blackList'] || [];
+    sites = sites.filter(it => {
+        // 黑名单过滤
+        it = blackList.length > 0 ? (!(new RegExp(blackList.join('|'))).test(it.name) &&
+            !(new RegExp(blackList.join('|'))).test(it.key)) : it;
+        return it;
+    });
+    // 排序列表
+    let sortList = customConfigList['sortList'] || [];
+
+    sites = naturalSort(sites, 'name', sortList);
+
+    return sites;
+}
+
 // 海阔不支持Intl.Collator
 /*
 export function naturalSort(arr, key, customOrder = []) {

@@ -14,6 +14,10 @@ import {readFile} from 'fs/promises';
 import path from 'path';
 import * as drpyS from '../libs/drpyS.js';
 import '../libs_drpy/jinja.js'
+
+// 自定义配置扩展 by yutons
+import {naturalCustomConfig} from '../utils/utils.js'
+
 import {naturalSort, urljoin, updateQueryString} from '../utils/utils.js'
 import {md5} from "../libs_drpy/crypto-util.js";
 import {ENV} from "../utils/env.js";
@@ -85,6 +89,10 @@ async function generateSiteJSON(options, requestHost, sub, pwd) {
     const files = readdirSync(jsDir);
     let valid_files = files.filter((file) => file.endsWith('.js') && !file.startsWith('_')); // 筛选出不是 "_" 开头的 .js 文件
     let sort_list = [];
+
+    // by yutons
+    let custom_config_list = [];
+
     // 获取排序配置文件路径
     let sort_file = path.join(path.dirname(subFilePath), `./order_common.html`);
     if (!existsSync(sort_file)) {
@@ -115,6 +123,15 @@ async function generateSiteJSON(options, requestHost, sub, pwd) {
         sort_list = sort_file_content.split('\n').filter(it => it.trim()).map(it => it.trim());
         // console.log(sort_list);
     }
+
+    /**
+     * 获取白名单排序 by yutons
+     */
+    if (!sub) {
+        let custom_config_list_file = path.join(configDir, `./env.custom.json`);
+        custom_config_list = JSON.parse(readFileSync(custom_config_list_file, 'utf-8'));
+    }
+
     let sites = [];
 
     //以下为自定义APP模板部分
@@ -635,6 +652,10 @@ async function generateSiteJSON(options, requestHost, sub, pwd) {
     }
     // console.log('sort_list:', sort_list);
     sites = naturalSort(sites, 'name', sort_list);
+
+    // 自定义配置扩展 by yutons
+    sites = naturalCustomConfig(sites, 'name', custom_config_list);
+
     return {sites, spider: link_jar};
 }
 
