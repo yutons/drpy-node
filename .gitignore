@@ -157,3 +157,5 @@ dist
 /apps/cat/
 /data/temp/
 .vercel
+/scripts/mjs/index.db
+/scripts/test/rsa-test.json
