@@ -760,7 +760,9 @@ async function generateParseJSON(jxDir, requestHost) {
  * @param {string} requestHost - 请求主机地址
  * @returns {Object} 包含lives数组的对象
  */
-function generateLivesJSON(requestHost) {
+function generateLivesJSON(requestHost, options) {
+    const configDir = options.configDir;
+
     let lives = [];
     let live_url = process.env.LIVE_URL || '';
     let epg_url = process.env.EPG_URL || ''; // 从.env文件读取
@@ -783,6 +785,21 @@ function generateLivesJSON(requestHost) {
             }
         )
     }
+
+    // 增加 自定义直播源 by yutons
+    let custom_config_list_file = path.join(configDir, `./env.custom.json`);
+    let custom_config_list = JSON.parse(readFileSync(custom_config_list_file, 'utf-8'));
+    let custom_lives = custom_config_list['lives'];
+    if (custom_lives) {
+        custom_lives = custom_lives.map(it => {
+            return {
+                ...it,
+                "url": it.url.startsWith('http') ? it.url : (requestHost + it.url)
+            }
+        })
+        lives.push(...custom_lives)
+    }
+
     return {lives}
 }
 
@@ -1003,7 +1020,7 @@ export default (fastify, options, done) => {
 
             // 生成各类配置数据
             const parseJSON = await generateParseJSON(options.jxDir, requestHost);
-            const livesJSON = generateLivesJSON(requestHost);
+            const livesJSON = generateLivesJSON(requestHost, options);
             const playerJSON = generatePlayerJSON(options.configDir, requestHost);
             // 合并所有配置数据
             const configObj = {sites_count: siteJSON.sites.length, ...playerJSON, ...siteJSON, ...parseJSON, ...livesJSON};

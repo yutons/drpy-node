@@ -262,7 +262,7 @@ const start = async () => {
             console.log('Not running on Vercel!');
         }
         // 启动成功 初始化配置
-        await configInit(localAddress);
+        // await configInit(localAddress);
         // await axios.get(localAddress + '/config/1').then(res => {
         //     console.log('初始化配置成功');
         // }).catch(async err => {
