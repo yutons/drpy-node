@@ -25,7 +25,15 @@
  * 传参 ?render=1&type=url&params=../json/哔哩大全.json@哔哩大全[官]
  * 获取收藏 /x/v3/fav/resource/list?media_id=1145063440&pn=1&ps=20&keyword=&order=mtime&type=0&tid=0&platform=web
  * &order=mtime&type=0&tid=0&platform=web
- */
+@header({
+  searchable: 0,
+  filterable: 0,
+  quickSearch: 0,
+  title: '哔哩收藏[官]',
+  '类型': '影视',
+  lang: 'dr2'
+})
+*/
 var rule = {
     title: '哔哩收藏[官]',
     host: 'https://api.bilibili.com',

@@ -1,3 +1,14 @@
+/*
+@header({
+  searchable: 1,
+  filterable: 1,
+  quickSearch: 1,
+  title: '央视频',
+  '类型': '影视',
+  lang: 'dr2'
+})
+*/
+
 var rule = {
     title:'央视频',
     host:'https://api.cntv.cn',

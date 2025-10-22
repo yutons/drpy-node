@@ -1,3 +1,14 @@
+/*
+@header({
+  searchable: 0,
+  filterable: 1,
+  quickSearch: 0,
+  title: '央视少儿[漫]',
+  '类型': '影视',
+  lang: 'dr2'
+})
+*/
+
 var rule = {
     title:'央视少儿[漫]',
     host:'https://api.cntv.cn',

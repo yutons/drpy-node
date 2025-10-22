@@ -1,3 +1,14 @@
+/*
+@header({
+  searchable: 2,
+  filterable: 0,
+  quickSearch: 0,
+  title: '瓜子影视',
+  '类型': '影视',
+  lang: 'dr2'
+})
+*/
+
 var rule = {
     title: '瓜子影视',
     host: 'https://www.gzvod.cc/',

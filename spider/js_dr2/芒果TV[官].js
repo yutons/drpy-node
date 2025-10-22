@@ -1,3 +1,14 @@
+/*
+@header({
+  searchable: 2,
+  filterable: 1,
+  quickSearch: 0,
+  title: '百忙无果[官]',
+  '类型': '影视',
+  lang: 'dr2'
+})
+*/
+
 var rule = {
     title: '百忙无果[官]',
     host: 'https://pianku.api.%6d%67%74%76.com',

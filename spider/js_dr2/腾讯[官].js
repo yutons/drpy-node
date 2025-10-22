@@ -1,3 +1,14 @@
+/*
+@header({
+  searchable: 2,
+  filterable: 1,
+  quickSearch: 0,
+  title: '腾讯[官]',
+  '类型': '影视',
+  lang: 'dr2'
+})
+*/
+
 var rule = {
     title: '腾讯[官]',
     host: 'https://v.qq.com',

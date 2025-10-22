@@ -14,7 +14,15 @@
  * 客户端长期Cookie设置教程:
  * 抓包哔哩手机端搜索access_key,取任意链接里的access_key和appkey在drpy环境变量中增加同名的环境变量即可
  * 此时哔哩.js这个解析可用于此源的解析线路用
- */
+@header({
+  searchable: 1,
+  filterable: 1,
+  quickSearch: 0,
+  title: '哔哩影视[官]',
+  '类型': '影视',
+  lang: 'dr2'
+})
+*/
 
 var rule = {
     title:'哔哩影视[官]',
