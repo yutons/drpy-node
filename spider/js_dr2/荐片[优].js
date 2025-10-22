@@ -12,6 +12,7 @@
 var rule = {
     title: '荐片[优]',
     // host: 'https://api.ubj83.com',
+    // https://${JSON.parse((await req(`${HOST}/api/appAuthConfig`) 获取图片URL
     host: 'https://api.ztcgi.com',
     homeUrl: '/api/dyTag/hand_data?category_id=88',
     url: '/api/crumb/list?page=fypage&type=0&limit=24&fyfilter',
@@ -50,7 +51,7 @@ var rule = {
         const data = JSON.parse(request(input)).data["20"];
         const d = data.map(item => ({
             title: item.title,
-            img: 'https://img1.vbwus.com' + item.path,
+            img: 'https://static.ztcuc.com' + item.path,
             desc: (item.mask || item.playlist?.title) + ' ⭐' + item.score,
             url: item.id
         }));
@@ -69,7 +70,7 @@ var rule = {
         const data = JSON.parse(request(apiUrl)).data;
         const d = data.map(item => {
             const isShort = tid === '67';
-            const imgUrl = 'https://img1.vbwus.com' +
+            const imgUrl = 'https://static.ztcuc.com' +
                 (isShort ? (item.cover_image || item.path) : (item.thumbnail || item.path));
             return {
                 title: item.title,
@@ -94,7 +95,7 @@ var rule = {
             const vodInfo = {
                 vod_id: id,
                 vod_name: itemData.title,
-                vod_pic: 'https://img1.vbwus.com' + (
+                vod_pic: 'https://static.ztcuc.com' + (
                     isShort
                         ? (itemData.cover_image || itemData.path || '')
                         : (itemData.thumbnail || itemData.path || '')
@@ -151,7 +152,7 @@ var rule = {
         const data = JSON.parse(request(input)).data;
         const d = data.map(item => ({
             title: item.title,
-            img: 'https://img1.vbwus.com' + item.thumbnail,
+            img: 'https://static.ztcuc.com' + item.thumbnail,
             desc: item.mask + ' ⭐' + item.score,
             url: item.id
         }));
