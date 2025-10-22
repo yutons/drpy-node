@@ -166,6 +166,11 @@ pm2 start drpys
 pm2 restart drpys
 ```
 
+```
+# 覆盖更新
+vercel --prod --force
+```
+
 ## 代理转发功能测试
 
 * [代理转发ds](/req/https://github.com/hjdhnx/drpy-node)
